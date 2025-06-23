@@ -1,0 +1,10 @@
+[project]
+name = "day1"
+version = "0.1.0"
+dependencies = [
+    "openai-agents-python",
+    "python-dotenv"
+]
+
+[tool.uv]
+python = ">=3.8"
