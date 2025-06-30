@@ -1,4 +1,4 @@
-Day 1 and Day 2 Learning Plan for OpenAI Agents SDK
+Day 1  Learning Plan for OpenAI Agents SDK
 ===================================================
 
 This document outlines detailed plans for **Day 1**  to start your journey toward mastering the OpenAI Agents SDK for Python, tailored for a beginner with basic Python skills (lists, dictionaries, functions, OOP). Each day includes 3 hours: 1 hour study (YouTube, documentation), 1 hour coding, 0.5 hours debugging, and 0.5 hours theory, using uv and a Gemini API key, all free. The schedule assumes 8:00--11:00 AM PKT (adjustable to 6:00--9:00 PM PKT). The goal is to build foundational skills for the SDK, with practical projects, debugging, and theoretical understanding to achieve mastery in 4 months (360 hours).
