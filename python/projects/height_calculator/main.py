@@ -1,0 +1,6 @@
+print("Welcome To Height Convertor")
+name=str(input("What's Your Name? "))
+height=float(input("What's Your Height In cm? "))
+meter=float(height*0.01)
+foot=float(round(0.0328*height,2))
+print(f"{name} Your Height In Foot Is {foot} And In Meter Is {meter}")
