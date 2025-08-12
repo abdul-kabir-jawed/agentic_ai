@@ -258,18 +258,6 @@ result = Runner.run_sync(agent, "What's the capital of France?")
 print(result.final_output)
 ```
 
-### Multiple Interactions
-```python
-agent = Agent(name="Tutor", instructions="You are a patient tutor.")
-
-# First question
-result1 = Runner.run_sync(agent, "Explain what variables are in programming.")
-print("First answer:", result1.final_output)
-
-# Follow-up question (agent remembers context)
-result2 = Runner.run_sync(agent, "Can you give me an example?")
-print("Follow-up answer:", result2.final_output)
-```
 
 ## 🌟 What Makes This Special?
 
