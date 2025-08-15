@@ -375,7 +375,7 @@ Top-P = 0.9:  █████████░ (90% of vocabulary - very diverse)
 ```
 
 #### 🔄 Frequency Penalty
-**Frequency Penalty** reduces the likelihood of repeating words that have already appeared, making responses less repetitive.
+**Frequency Penalty** reduces the likelihood of repeating words that have already appeared, making responses less repetitive.Only work with OpenAI and Azure API.
 
 ```python
 # 📝 High Repetition Tolerance (Frequency Penalty: 0.0)
