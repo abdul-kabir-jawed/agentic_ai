@@ -297,7 +297,7 @@ research_assistant = Agent(
 ## 🔬 Advanced Configuration Techniques
 
 ### 🔄 Parallel Tool Processing
-
+**Parallel Tool Processing** Enable parallel processing.Not supported in Gemini API and other
 ```python
 from agents import function_tool
 
