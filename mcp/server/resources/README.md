@@ -234,103 +234,6 @@ def resource(
 | `description` | `str \| None` | ❌ | Detailed description of what the resource provides |
 | `mime_type` | `str \| None` | ❌ | MIME type hint for content (e.g., `"application/json"`) |
 
-#### Resource Listing
-```python
-async def list_resources(self) -> list[MCPResource]:
-    """List all available resources."""
-    resources = self._resource_manager.list_resources()
-    return [
-        MCPResource(
-            uri=resource.uri,
-            name=resource.name or "",
-            title=resource.title,
-            description=resource.description,
-            mimeType=resource.mime_type,
-        )
-        for resource in resources
-    ]
-```
-
-#### Resource Reading
-```python
-async def read_resource(self, uri: AnyUrl | str) -> Iterable[ReadResourceContents]:
-    """Read a resource by URI."""
-    resource = await self._resource_manager.get_resource(uri)
-    if not resource:
-        raise ResourceError(f"Unknown resource: {uri}")
-    
-    try:
-        content = await resource.read()
-        return [ReadResourceContents(content=content, mime_type=resource.mime_type)]
-    except Exception as e:
-        logger.exception(f"Error reading resource {uri}")
-        raise ResourceError(str(e))
-```
-
-### Client-Side Resource Access
-
-```python
-async def read_resource(self, uri: str) -> Any:
-    """Read a resource and parse based on MIME type."""
-    result = await self.session().read_resource(AnyUrl(uri))
-    resource = result.contents[0]
-    
-    if isinstance(resource, types.TextResourceContents):
-        if resource.mimeType == "application/json":
-            return json.loads(resource.text)
-    
-    return resource.text
-```
-
----
-
-## 🎯 Parameter Completion
-
-Dynamic resources support intelligent parameter completion:
-
-### Examples:
-- Typing `"Par"` for `weather://forecast/{city}` → suggests `"Paris"` or `"Park City"`
-- Typing `"JFK"` for `flights://search/{airport}` → suggests `"JFK - John F. Kennedy International"`
-
-### Implementation:
-```python
-@mcp.resource("weather://forecast/{city}/{date}")
-def get_weather_forecast(city: str, date: str) -> dict:
-    """Get weather forecast with auto-completed parameters."""
-    return {
-        "city": city,
-        "date": date,
-        "forecast": fetch_weather_data(city, date)
-    }
-```
-
----
-
-## 🎨 User Interaction Patterns
-
-Applications can implement resource discovery through various UI patterns:
-
-### 🌳 Tree/List Views
-- Familiar folder-like structures
-- Hierarchical browsing
-- Nested resource organization
-
-### 🔍 Search & Filter
-- Finding specific resources
-- Keyword-based discovery
-- Category filtering
-
-### 🤖 Smart Suggestions
-- AI-powered resource selection
-- Context-aware recommendations
-- Automatic inclusion based on conversation
-
-### 📋 Manual Selection
-- Bulk resource selection
-- Preview capabilities
-- Integration with existing file browsers
-
----
 
 ## 💡 Best Practices
 
@@ -419,13 +322,52 @@ async def get_user_profile(user_id: str) -> dict:
 
 ### Resource Subscriptions
 Monitor resource changes in real-time:
+
+**Client Methods:**
 ```python
-# Subscribe to resource changes
+async def subscribe_resource(self, uri: AnyUrl) -> types.EmptyResult:
+    """Send a resources/subscribe request."""
+    return await self.send_request(
+        types.ClientRequest(
+            types.SubscribeRequest(
+                method="resources/subscribe",
+                params=types.SubscribeRequestParams(uri=uri),
+            )
+        ),
+        types.EmptyResult,
+    )
+
+async def unsubscribe_resource(self, uri: AnyUrl) -> types.EmptyResult:
+    """Send a resources/unsubscribe request."""
+    return await self.send_request(
+        types.ClientRequest(
+            types.UnsubscribeRequest(
+                method="resources/unsubscribe",
+                params=types.UnsubscribeRequestParams(uri=uri),
+            )
+        ),
+        types.EmptyResult,
+    )
+```
+
+**Resource Update Notification:**
+```json
 {
   "jsonrpc": "2.0",
-  "method": "resources/subscribe",
+  "method": "resources/updated",
   "params": {
-    "uri": "docs://live-feed"
+    "uri": "file:///logs/app.log"
+  }
+}
+```
+
+**Server Capability Required:**
+```json
+{
+  "capabilities": {
+    "resources": {
+      "subscribe": true
+    }
   }
 }
 ```
